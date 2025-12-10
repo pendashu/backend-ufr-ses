@@ -7,7 +7,15 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://pendashu.github.io",  // ton front GitHub Pages
+    "http://localhost:3000"       // pour tests en local
+  ],
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
+
 
 // Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -26,7 +34,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/per', require('./routes/per'));
 
-app.use('/api/stocks', require('./routes/stock'));
+app.use('/api/stock', require('./routes/stock'));
 
 app.use('/api/carburant', require('./routes/carburant'));
 
