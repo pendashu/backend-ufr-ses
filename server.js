@@ -27,3 +27,4 @@ app.get('/', (req, res) => {
 // Démarrage
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur le port ${PORT}`));
+app.use('/api/dashboard', require('./routes/dashboard'));
