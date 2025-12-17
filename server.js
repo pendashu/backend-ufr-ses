@@ -18,6 +18,7 @@ app.use('/api/per', require('./routes/per'));
 app.use('/api/stocks', require('./routes/stocks'));
 app.use('/api/carburant', require('./routes/carburant'));
 app.use('/api/passation', require('./routes/passation'));
+app.use('/api/dashboard', require('./routes/dashboard'));
 
 // Route de test
 app.get('/', (req, res) => {
@@ -26,5 +27,4 @@ app.get('/', (req, res) => {
 
 // Démarrage
 const PORT = process.env.PORT || 5000;
-app.use('/api/dashboard', require('./routes/dashboard'));
 app.listen(PORT, () => console.log(`🚀 Serveur démarré sur le port ${PORT}`));
