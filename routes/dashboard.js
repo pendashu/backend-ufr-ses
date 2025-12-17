@@ -9,20 +9,22 @@ const Passation = require('../models/Passation');
 // GET /api/dashboard — Résumé global
 router.get('/', async (req, res) => {
   try {
-    const totalBudget = 1000000; // À remplacer par une vraie valeur depuis MongoDB
+    // Récupérer les données
     const depenses = await Depense.find();
+    const pers = await Per.find();
+    const stocks = await Stock.find();
+    const pleins = await Carburant.find();
+    const lots = await Passation.find();
+
+    // Calculs
+    const totalBudget = 1500000; // À remplacer par une vraie valeur si besoin
     const totalDepenses = depenses.reduce((acc, d) => acc + d.montant, 0);
     const solde = totalBudget - totalDepenses;
-
-    const pers = await Per.find();
-    const perEnAttente = pers.filter(p => p.statut === "en attente").length;
-
-    const stocks = await Stock.find();
+    const perEnAttente = pers.filter(p => p.statut === 'en attente').length;
     const stocksCritiques = stocks.filter(s => s.stock <= s.seuil).length;
+    const consommationMoyenne = pleins.length > 0 ? pleins.reduce((sum, p) => sum + p.quantite, 0) / pleins.length : 0;
 
-    const pleins = await Carburant.find();
-    const consommationMoyenne = pleins.length > 0 ? pleins.reduce((acc, p) => acc + p.quantite, 0) / pleins.length : 0;
-
+    // Répondre
     res.json({
       resume: {
         totalBudget,
@@ -30,11 +32,12 @@ router.get('/', async (req, res) => {
         solde,
         perEnAttente,
         stocksCritiques,
-        consommationMoyenne
+        consommationMoyenne: parseFloat(consommationMoyenne.toFixed(2))
       }
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Erreur dashboard :", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 
