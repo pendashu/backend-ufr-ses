@@ -7,6 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(cors({
+  origin: 'https://pendashu.github.io', // Autorise ton frontend GitHub Pages
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
 // Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connecté"))
